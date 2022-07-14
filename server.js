@@ -41,6 +41,7 @@ app.get("/createtable",(req, res) => {
   })
 })
 
+//データを追加
 app.get("/addpost1",(req, res) => {
   let post = {title: "Post One", body: "This is post number one"}
   let sql = "INSERT INTO posts SET ?"
@@ -63,6 +64,60 @@ app.get("/addpost2",(req, res) => {
   })
 })
 
+//データを取得
+app.get("/getposts", (req, res) => {
+  let sql = "SELECT * FROM posts"
+  let query = db.query(sql, (err, results) => {
+    if(err) throw err
+    console.log(results)
+    res.send("Posts fetched...")
+    console.log("データを取得しました")
+  })
+})
+
+app.get("/gettitle", (req, res) => {
+  let sql = "SELECT title FROM posts"
+  let query = db.query(sql, (err, results) => {
+    if(err) throw err
+    console.log(results)
+    res.send("Title fetched...")
+    console.log("データを取得しました")
+  })
+})
+
+//req.params.idからデータを取得
+app.get("/getpost/:id", (req, res) => {
+  let sql = `SELECT * FROM posts WHERE id = ${req.params.id}`
+  let query = db.query(sql, (err, results) => {
+    if(err) throw err
+    console.log(results)
+    res.send("Single post fetched...")
+    console.log("データを取得しました")
+  })
+})
+
+//データを更新
+app.get("/updatepost/:id", (req, res) => {
+  let newTitle = "Updated Title"
+  let sql = `UPDATE posts SET title = "${newTitle}" WHERE id = ${req.params.id}`
+  let query = db.query(sql, (err, results) => {
+    if(err) throw err
+    console.log(results)
+    res.send("Updated post...")
+    console.log("データを更新しました")
+  })
+})
+
+//データを削除
+app.get("/deletepost/:id", (req, res) => {
+  let sql = `DELETE FROM posts WHERE id = ${req.params.id}`
+  let query = db.query(sql, (err, results) => {
+    if(err) throw err
+    console.log(results)
+    res.send("Delete single post...")
+    console.log("データを削除しました")
+  })
+})
 
 app.listen(PORT, () => {
   console.log(`localhost:${PORT}が起動しました`)
